@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Switch, Route} from "react-router-dom"
 import './App.css';
 import AddEdit from './pages/AddEdit';
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import View from './pages/View';
 import Home from './pages/Home';
