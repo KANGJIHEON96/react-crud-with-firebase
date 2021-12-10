@@ -1,15 +1,26 @@
 import * as firebase from "firebase";
+import "firebase/database"
 
-var firebaseConfig = {
-    apiKey: "AIzaSyDqY6ShKNmvMZ6SpPffjzBKc2zW6MZggzw",
-    authDomain: "react-crud-262e5.firebaseapp.com",
-    databaseURL: "https://react-crud-262e5.firebaseio.com",
-    projectId: "react-crud-262e5",
-    storageBucket: "react-crud-262e5.appspot.com",
-    messagingSenderId: "766630761998",
-    appId: "1:766630761998:web:eff168790dce0f0cebce5f"
-  };
-  // Initialize Firebase
-  var fireDb = firebase.initializeApp(firebaseConfig);
+import 'firebase/storage';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKnDGXuahUVgGP2CLfTi9sSlBeBnC1tK8",
+  authDomain: "react-contact-e3c2c.firebaseapp.com",
+  projectId: "react-contact-e3c2c",
+  storageBucket: "react-contact-e3c2c.appspot.com",
+  messagingSenderId: "421623974991",
+  appId: "1:421623974991:web:0bd95b49bb46fd147bee3a",
+  databaseURL:"https://react-contact-e3c2c-default-rtdb.firebaseio.com/",
+};
+
+  
+
+  const fireDb = firebase.initializeApp(firebaseConfig);
+
+  const projectStorage = firebase.storage();
+  const projectFirestore = firebase.firestore();
+  const timestamp = firebase.database.ServerValue.TIMESTAMP;
 
   export default fireDb.database().ref();
+
+  export { timestamp, projectStorage, projectFirestore }

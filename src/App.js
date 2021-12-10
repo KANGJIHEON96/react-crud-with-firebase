@@ -1,15 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter, Switch, Route} from "react-router-dom"
 import './App.css';
-import Contacts from './components/Contacts';
+import AddEdit from './pages/AddEdit';
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import View from './pages/View';
+import Home from './pages/Home';
+import Header from './components/Header';
+
+
 
 function App() {
   return (
-    <div className="row">
-      <div className="col-md-8 offset-md-2">
-        <Contacts />
-      </div>
-    </div>
+  <BrowserRouter>
+  <div className="App">
+    <Header/>
+  <ToastContainer position="top-center" />
+  <Switch>
+    <Route exact path="/" component={Home} />
+    <Route path="/add" component={AddEdit} />
+    <Route path="/update/:id" component={AddEdit} />
+    <Route path="/view/:id" component={View} />
+  </Switch>
+  </div>
+  </BrowserRouter>
   );
 }
 
