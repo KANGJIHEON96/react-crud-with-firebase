@@ -56,7 +56,7 @@ const View = () => {
     <>
     {/* <img src={user.photo} style={{width:"25%", height:"25%"}}/> */}
                 {user?.photo?.map(function(binaryData,index) {
-                      return <img key={index} src={binaryData} alt={index} width="120" size={5}/>})  } 
+                      return <img key={index} src={binaryData} alt={index} width="120" />})  } 
 
 
                      
