@@ -14,7 +14,7 @@ function App() {
   return (
   <BrowserRouter>
   <div className="App">
-    <Header/>1
+    <Header/>
   <ToastContainer position="top-center" />
   <Switch>
     <Route exact path="/" component={Home} />
