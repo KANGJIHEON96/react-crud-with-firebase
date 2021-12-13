@@ -19,7 +19,7 @@ const initialState = {
     endDate:'',
 }
 
-const AddEdit = () => {
+const Reply = () => {
 
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null);
@@ -43,6 +43,8 @@ const AddEdit = () => {
     const history = useHistory()
 
     const {id} = useParams()
+    
+    
 
 
     useEffect(() => {
@@ -59,14 +61,7 @@ const AddEdit = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if(id && Object.keys(data).length) {
-            setState({...data[id]})
-        } else {
-            setState({...initialState})
-        }
-       
-    }, [id,data])
+
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -134,22 +129,12 @@ const AddEdit = () => {
         if(!title || !content || !user ) {
             toast.error("입력란을 모두 작성하세요")
         } else {
-            if(!id) {
-                // fireDbRef.child("contacts").push(state, (err) => {
-                    // fireDbRef.child("contacts").push({...state, pk: fireDbRef.child('id').push().key, date: timestamp}, (err) => {
-                fireDbRef.child("contacts").push({...state,  date: timestamp}, (err) => {
-                    if(err) {
-                        toast.error(err)
-                    } else {
-                        toast.success("게시물이 등록되었습니다.")
-                    }
-                })
-            } else {
-                    fireDbRef.child(`contacts/${id}`).set({...state, date: timestamp}, (err) => {
+            if(id) {
+                    fireDbRef.child("contacts").push({...state, fk: id, date: timestamp}, (err) => {
                         if(err) {
                             toast.error(err)
                         } else {
-                            toast.success("업데이트 성공.")
+                            toast.success("답글 등록 성공.")
                         }
                     })
             }
@@ -157,6 +142,8 @@ const AddEdit = () => {
             setTimeout(() => history.push('/'), 500);
         }
     }
+
+
     return ( <>
         <div style={{display:"flex", margin:"auto"}}>
             <form style={{margin: "auto", padding:"15px", maxWidth:"400px", alignContent:"center",}} onSubmit={handleSubmit} onChange={e => {setName(e.target.value);
@@ -189,7 +176,7 @@ const AddEdit = () => {
                 </div>
 
               
-                <input style={{width:"800px"}} type="submit" value={id ? "Update" : "Save"}  onClick={() => {setName(""); setPristine()}} />
+                <input style={{width:"800px"}} type="submit" value={id ? "답글 등록하기" : "Save"}  onClick={() => {setName(""); setPristine()}} />
             </form>
         </div>
         {Prompt}
@@ -197,4 +184,4 @@ const AddEdit = () => {
    )
 }
 
-export default AddEdit
+export default Reply

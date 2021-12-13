@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import fireDb from "../firebase";
+import {fireDbRef} from "../firebase";
 import {Link} from 'react-router-dom'
 import './Home.css'
 import { toast } from 'react-toastify';
-
 
 
 
@@ -28,13 +27,26 @@ const Home = () => {
         return `${Math.floor(years)}년 전`
       }
 
+     
 
-    const [data, setData] =useState({});
+      const [data, setData] =useState([]);
+      
 
     useEffect(() => {
-        fireDb.child("contacts").on("value", (snapshot) => {
+        fireDbRef.child("contacts").on("value", (snapshot) => {
             if(snapshot.val()!==null) {
-                setData({...snapshot.val()})
+                const data = snapshot.val();
+                const res = Object.keys(data).reduce((acc, cur) => {
+                    if(acc.findIndex((v) => v.pk === data[cur]?.fk) > -1) {
+                        // +1 상수로 되어 있는걸 동적으로 수정
+                        acc.splice((acc.findIndex((v) => v.pk === data[cur]?.fk)) + 1, 0, data[cur])
+                    }else {
+                        acc.push({...data[cur], pk: cur});
+                       
+                    }
+                    return acc
+                }, []);
+                setData(res)
             } else {
                 setData({})
             }
@@ -45,9 +57,10 @@ const Home = () => {
         }
     }, []);
 
+
     const onDelete = (id) => {
         if(window.confirm("정말 삭제하시겠습니까?")) {
-            fireDb.child(`contacts/${id}`).remove((err) => {
+            fireDbRef.child(`contacts/${id}`).remove((err) => {
                 if (err) {
                 toast.error(err)
             } else {
@@ -71,6 +84,7 @@ const Home = () => {
         
     }
 
+    
 
 
     return (
@@ -88,33 +102,37 @@ const Home = () => {
                     </tr>
                 </thead>
                 
+                
                 <tbody>
-                    {console.log('data: ', data)}
-                    {Object.keys(data).map((id, index) => {
-                        return (
-                            <tr key={id}>
-                                <th scope="row">{index + 1}</th>
-                                <td>{data[id].title}</td>
-                                <td>{data[id].content}</td>
-                                <td>{data[id].user}</td>
-                                <td>{ImageIcon(data[id]?.photo) ? 'O' : 'X'}</td>
-                                <td>{displayedAt(data[id]?.date)}</td>
+                    {
+                     data?.map((row, index) => {
+                         return ( <>
+                             <tr key={row.pk}>
+                                 <th scope="row">{index + 1}</th>
+                                 <td>{row.title}</td>
+                                 <td>{row.content}</td>
+                                 <td>{row.user}</td>
+                                 <td>{ImageIcon(row?.photo) ? 'O' : 'X'}</td>
+                                 <td>{displayedAt(row?.date)}</td>
                                
-                                <td>
-                                    <Link to={`/update/${id}`}>
-                                    <button className="btn btn-edit">수정</button>
-                                    </Link>
-                                    <button className="btn btn-delete" onClick={() => onDelete(id)}>삭제</button>
-                                    <Link to={`/view/${id}`}>
-                                    <button className="btn btn-edit">상세보기</button>
-                                    </Link>
+                                 <td>
+                                     <Link to={`/update/${row.pk}`}>
+                                     <button className="btn btn-edit">수정</button>
+                                     </Link>
+                                     <button className="btn btn-delete" onClick={() => onDelete(row.pk)}>삭제</button>
+                                     <Link to={`/view/${row.pk}`}>
+                                     <button className="btn btn-edit">상세보기</button>
+                                     </Link>
                                     
-                                </td>
-                                
-                            </tr>
-                        )
-                    })}
+                                 </td>
+                             </tr>
+                             </>
+                         )
+                     })
+                    }
+                    
                 </tbody>
+               
             </table>
         </div>
     )

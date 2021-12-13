@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css"
 import View from './pages/View';
 import Home from './pages/Home';
 import Header from './components/Header';
+import Reply from './pages/Reply';
 
 
 
@@ -21,6 +22,7 @@ function App() {
     <Route path="/add" component={AddEdit} />
     <Route path="/update/:id" component={AddEdit} />
     <Route path="/view/:id" component={View} />
+    <Route path="/reply/:id" component={Reply} />
   </Switch>
   </div>
   </BrowserRouter>

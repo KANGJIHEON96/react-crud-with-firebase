@@ -20,7 +20,7 @@ const firebaseConfig = {
   const projectStorage = firebase.storage();
   const projectFirestore = firebase.firestore();
   const timestamp = firebase.database.ServerValue.TIMESTAMP;
+const fireDbRef = fireDb.database().ref();
+  // export default fireDb.database().ref();
 
-  export default fireDb.database().ref();
-
-  export { timestamp, projectStorage, projectFirestore }
+  export { timestamp, projectStorage, projectFirestore,fireDbRef  }

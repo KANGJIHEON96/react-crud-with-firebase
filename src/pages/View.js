@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import fireDb from "../firebase"
+import {fireDbRef} from "../firebase"
 import { useParams, Link } from 'react-router-dom'
 import "./View.css"
 
@@ -39,7 +39,7 @@ const View = () => {
     const {id} = useParams(); //id와 라우터 매치시키는 기능
 
     useEffect(() => {
-        fireDb
+        fireDbRef
         .child(`contacts/${id}`)
         .once('value')
         .then((snapshot) => {
@@ -79,8 +79,8 @@ const View = () => {
 
 
 <hr style={{color:"black", width:"100%"}} />
-    <Link to="/add"><button className="btn btn-edit">답글 작성하기</button></Link>
     <Link to="/"><button className="btn btn-edit">돌아가기</button></Link>
+    <Link to={`/reply/${id}`}><button className="btn btn-edit">답글 달기</button></Link>
 </>)
 }
 
