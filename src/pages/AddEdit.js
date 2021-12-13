@@ -9,7 +9,7 @@ import DatePicker from '../components/datePicker'
 
 
 const initialState = {
-    
+
     title:"",
     content:"",
     user:"",
@@ -165,10 +165,12 @@ const AddEdit = () => {
                 <input type="text" id="title" name="title" style={{width: "800px", height:"70px", margin:"auto"}} onChange={handleInputChange} placeholder="제목" value={title} />
                 <input type="text" id="content" name="content" placeholder="내용" value={content} onChange={handleInputChange} style={{width: "800px", height: "500px"}}></input>
                 <input type="text" id="user" name="user"  placeholder="사용자" value={user} onChange={handleInputChange}></input>
-      
+               
                {
-                   state.photo.map(function(binaryData,index) {
+                   state?.photo?.map(function(binaryData,index) {
+                       
                        return <img key={index} src={binaryData} alt={index} width="120" />
+                       
                    })
                } 
 

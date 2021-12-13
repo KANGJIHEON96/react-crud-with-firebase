@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom'
 import './Home.css'
 import { toast } from 'react-toastify';
 
+import Pagination from '../components/Pagination';
+
 
 
 const Home = () => {
@@ -30,7 +32,11 @@ const Home = () => {
      
 
       const [data, setData] =useState([]);
-      
+
+      const [row, setRow] = useState([])
+      const [limit, setLimit] = useState(10);
+      const [page, setPage] = useState(1);
+      const offset = (page - 1) * limit;
 
     useEffect(() => {
         fireDbRef.child("contacts").on("value", (snapshot) => {
@@ -48,12 +54,13 @@ const Home = () => {
                 }, []);
                 setData(res)
             } else {
-                setData({})
+                console.log('this')
+                setData([])
             }
         });
 
         return () => {
-            setData({})
+            setData([])
         }
     }, []);
 
@@ -89,6 +96,20 @@ const Home = () => {
 
     return (
         <div style={{marginTop: "100px"}}>
+             <label>
+        페이지 당 표시할 게시물 수:&nbsp;
+        <select
+          type="number"
+          value={limit}
+          onChange={({ target: { value } }) => setLimit(Number(value))}
+        >
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
             <table className="styled-table">
                 <thead>
                     <tr>
@@ -104,12 +125,13 @@ const Home = () => {
                 
                 
                 <tbody>
+                    
                     {
-                     data?.map((row, index) => {
+                     data.slice(offset, offset + limit)?.map((row, index) => {
                          return ( <>
                              <tr key={row.pk}>
-                                 <th scope="row">{index + 1}</th>
-                                 <td>{row.title}</td>
+                                 <th scope="row">{ index + 1}</th>
+                                 <td>{(row?.fk) ? 'ㄴ' : row.title}</td>
                                  <td>{row.content}</td>
                                  <td>{row.user}</td>
                                  <td>{ImageIcon(row?.photo) ? 'O' : 'X'}</td>
@@ -123,16 +145,21 @@ const Home = () => {
                                      <Link to={`/view/${row.pk}`}>
                                      <button className="btn btn-edit">상세보기</button>
                                      </Link>
-                                    
+                         
                                  </td>
                              </tr>
                              </>
                          )
-                     })
+                       })
                     }
                     
                 </tbody>
-               
+                <Pagination
+          total={row.length}
+          limit={limit}
+          page={page}
+          setPage={setPage}
+        />
             </table>
         </div>
     )
