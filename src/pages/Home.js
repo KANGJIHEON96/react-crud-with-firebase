@@ -97,14 +97,14 @@ const Home = () => {
     return (
         <div style={{marginTop: "100px"}}>
              <label>
-        페이지 당 표시할 게시물 수:&nbsp;
+        페이지당 표시할 게시물 수:
         <select
           type="number"
           value={limit}
           onChange={({ target: { value } }) => setLimit(Number(value))}
         >
           <option value="10">10</option>
-          <option value="12">12</option>
+          <option value="15">15</option>
           <option value="20">20</option>
           <option value="50">50</option>
           <option value="100">100</option>
@@ -127,7 +127,7 @@ const Home = () => {
                 <tbody>
                     
                     {
-                     data.slice(offset, offset + limit)?.map((row, index) => {
+                     data.slice(offset, offset+limit)?.map((row, index) => {
                          return ( <>
                              <tr key={row.pk}>
                                  <th scope="row">{ index + 1}</th>
