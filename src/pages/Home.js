@@ -34,9 +34,9 @@ const Home = () => {
       const [data, setData] =useState([]);
 
       const [row, setRow] = useState([])
-      const [limit, setLimit] = useState(10);
-      const [page, setPage] = useState(1);
-      const offset = (page - 1) * limit;
+      const [limit, setLimit] = useState(3); // 페이지당 게시물 수
+      const [page, setPage] = useState( 1);
+      const offset = (page - 1) * limit; // 첫 게시물의 위치
 
     useEffect(() => {
         fireDbRef.child("contacts").on("value", (snapshot) => {
@@ -103,11 +103,11 @@ const Home = () => {
           value={limit}
           onChange={({ target: { value } }) => setLimit(Number(value))}
         >
+          <option value="3">3</option>
+          <option value="5">5</option>
           <option value="10">10</option>
-          <option value="15">15</option>
           <option value="20">20</option>
           <option value="50">50</option>
-          <option value="100">100</option>
         </select>
       </label>
             <table className="styled-table">
@@ -155,11 +155,11 @@ const Home = () => {
                     
                 </tbody>
                 <Pagination
-          total={row.length}
-          limit={limit}
-          page={page}
-          setPage={setPage}
-        />
+                total={row.length}
+                limit={limit}
+                page={page}
+                setPage={setPage}
+                />
             </table>
         </div>
     )
