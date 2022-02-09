@@ -3,6 +3,7 @@ import {fireDbRef} from "../firebase";
 import {Link} from 'react-router-dom'
 import './Home.css'
 import { toast } from 'react-toastify';
+import imgA from '../camera.png'
 
 import Pagination from '../components/Pagination';
 
@@ -29,14 +30,17 @@ const Home = () => {
         return `${Math.floor(years)}년 전`
       }
 
-     
+ 
 
       const [data, setData] =useState([]);
 
       const [row, setRow] = useState([])
-      const [limit, setLimit] = useState(3); // 페이지당 게시물 수
-      const [page, setPage] = useState( 1);
-      const offset = (page - 1) * limit; // 첫 게시물의 위치
+      const [limit, setLimit] = useState(5); // 페이지당 게시물 수
+      const [page, setPage] = useState(1); // 현재 페이지번호
+      const [numPages, setNumPages] = useState(0); // 필요한 페이지의 개수
+      const offset = (page-1) * limit; // 첫 게시물의 위치
+
+      useEffect(() => console.log('page: ',page), [page])
 
     useEffect(() => {
         fireDbRef.child("contacts").on("value", (snapshot) => {
@@ -46,6 +50,7 @@ const Home = () => {
                     if(acc.findIndex((v) => v.pk === data[cur]?.fk) > -1) {
                         // +1 상수로 되어 있는걸 동적으로 수정
                         acc.splice((acc.findIndex((v) => v.pk === data[cur]?.fk)) + 1, 0, data[cur])
+                        //splice(시작점, 지울 개수, 넣을 것)
                     }else {
                         acc.push({...data[cur], pk: cur});
                        
@@ -93,23 +98,21 @@ const Home = () => {
 
     
 
-
     return (
         <div style={{marginTop: "100px"}}>
              <label>
-        페이지당 표시할 게시물 수:
+             페이지당 표시할 게시물 수:
         <select
           type="number"
           value={limit}
-          onChange={({ target: { value } }) => setLimit(Number(value))}
-        >
-          <option value="3">3</option>
+          onChange={({ target: { value } }) => setLimit(Number(value))}>
           <option value="5">5</option>
+          <option value="8">8</option>
           <option value="10">10</option>
           <option value="20">20</option>
-          <option value="50">50</option>
         </select>
-      </label>
+             </label>
+
             <table className="styled-table">
                 <thead>
                     <tr>
@@ -125,16 +128,16 @@ const Home = () => {
                 
                 
                 <tbody>
-                    
+                    {/* 배열의 일부분을 잘라내어 새로운 배열을 리턴하기 위해 slice함수를 사용함. */}
                     {
                      data.slice(offset, offset+limit)?.map((row, index) => {
                          return ( <>
                              <tr key={row.pk}>
-                                 <th scope="row">{ index + 1}</th>
-                                 <td>{(row?.fk) ? 'ㄴ' : row.title}</td>
-                                 <td>{row.content}</td>
-                                 <td>{row.user}</td>
-                                 <td>{ImageIcon(row?.photo) ? 'O' : 'X'}</td>
+                                 <th scope="row">{(index + 1) + 5 * (page-1)}</th>
+                                 <td>{(row?.fk) ? 'ㄴ re: ' + row.title : row?.title}</td>
+                                 <td>{row?.content}</td>
+                                 <td>{row?.user}</td>
+                                 <td>{ImageIcon(row?.photo) ? <img src = {imgA} style={{width : "20px"}} /> : 'X'}</td>
                                  <td>{displayedAt(row?.date)}</td>
                                
                                  <td>
@@ -142,7 +145,7 @@ const Home = () => {
                                      <button className="btn btn-edit">수정</button>
                                      </Link>
                                      <button className="btn btn-delete" onClick={() => onDelete(row.pk)}>삭제</button>
-                                     <Link to={`/view/${row.pk}`}>
+                                     <Link to={`/view/${row?.pk}`}>
                                      <button className="btn btn-edit">상세보기</button>
                                      </Link>
                          
@@ -154,11 +157,13 @@ const Home = () => {
                     }
                     
                 </tbody>
+                {console.log('data: ', data)}
                 <Pagination
-                total={row.length}
-                limit={limit}
-                page={page}
-                setPage={setPage}
+                    total={data?.length}
+                    limit={limit}
+                    page={page}
+                    setPage={setPage}
+                    numPages={numPages}
                 />
             </table>
         </div>

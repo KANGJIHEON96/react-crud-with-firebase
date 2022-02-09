@@ -38,7 +38,7 @@ const AddEdit = () => {
     const [data, setData] = useState({});
 
 
-    const { title, content, user, date,  } = state;
+    const { title, content, user,   } = state;
 
     const history = useHistory()
 
@@ -136,8 +136,8 @@ const AddEdit = () => {
         } else {
             if(!id) {
                 // fireDbRef.child("contacts").push(state, (err) => {
-                    // fireDbRef.child("contacts").push({...state, pk: fireDbRef.child('id').push().key, date: timestamp}, (err) => {
-                fireDbRef.child("contacts").push({...state,  date: timestamp}, (err) => {
+                    fireDbRef.child("contacts").push({...state, pk: fireDbRef.child('id').push().key, date: timestamp}, (err) => {
+                // fireDbRef.child("contacts").push({...state,  date: timestamp, }, (err) => {
                     if(err) {
                         toast.error(err)
                     } else {
@@ -145,7 +145,7 @@ const AddEdit = () => {
                     }
                 })
             } else {
-                    fireDbRef.child(`contacts/${id}`).set({...state, date: timestamp}, (err) => {
+                    fireDbRef.child(`contacts/${id}`).set({...state, date: timestamp, }, (err) => {
                         if(err) {
                             toast.error(err)
                         } else {
@@ -154,17 +154,19 @@ const AddEdit = () => {
                     })
             }
             
-            setTimeout(() => history.push('/'), 500);
+            setTimeout(() => history.push('/'), 500);        
         }
     }
+
+
     return ( <>
         <div style={{display:"flex", margin:"auto"}}>
             <form style={{margin: "auto", padding:"15px", maxWidth:"400px", alignContent:"center",}} onSubmit={handleSubmit} onChange={e => {setName(e.target.value);
                 setDirty();}}>
                 {console.log(';state.photo: ', state)}
-                <input type="text" id="title" name="title" style={{width: "800px", height:"70px", margin:"auto"}} onChange={handleInputChange} placeholder="제목" value={title} />
-                <input type="text" id="content" name="content" placeholder="내용" value={content} onChange={handleInputChange} style={{width: "800px", height: "500px"}}></input>
-                <input type="text" id="user" name="user"  placeholder="사용자" value={user} onChange={handleInputChange}></input>
+                <input type="textarea" id="title" name="title" style={{width: "800px", height:"70px", margin:"auto"}} onChange={handleInputChange} placeholder="제목" value={title} />
+                <input type="textarea" id="content" name="content" placeholder="내용" value={content} onChange={handleInputChange} style={{width: "800px", height: "500px"}}></input>
+                <input type="textarea" id="user" name="user"  placeholder="사용자" value={user} onChange={handleInputChange}></input>
                
                {
                    state?.photo?.map(function(binaryData,index) {

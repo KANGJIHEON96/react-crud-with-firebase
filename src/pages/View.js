@@ -29,7 +29,7 @@ const View = () => {
 
     const [user, setUser]= useState({})
     
-
+    
    
 
     console.log('user: ', user)
@@ -37,6 +37,9 @@ const View = () => {
     
 
     const {id} = useParams(); //id와 라우터 매치시키는 기능
+    const {fk} = useParams()
+
+    
 
     useEffect(() => {
         fireDbRef
@@ -51,6 +54,8 @@ const View = () => {
         })
     }, [id]);
 
+    
+
 
     return (
     <>
@@ -58,30 +63,25 @@ const View = () => {
                 {user?.photo?.map(function(binaryData,index) {
                       return <img key={index} src={binaryData} alt={index} width="120" />})  } 
 
-
-                     
-                       
-                
-
-    <div class="wrapper">
-  <div class="section3">
-<div class="box" style={{height:"300px"}}>
-<p>내용:{user.content}</p>
-</div>
-<p class="box">작성자:{user.user}</p>
-<p class="box">작성시간:{displayedAt(user.date)}</p>
+                    <div class="wrapper">
+                <div class="section3">
+                <div class="box" style={{height:"300px"}}>
+                <p>내용:{user?.content}</p>
+                </div>
+                <p class="box">작성자:{user?.user}</p>
+                <p class="box">작성시간:{displayedAt(user?.date)}</p>
 
 
-</div>
-<div class="box ad1">제목:{user.title}</div>
-</div>
+                </div>
+                <div class="box ad1">제목:{user?.title}</div>
+                </div>
 
 
 
-<hr style={{color:"black", width:"100%"}} />
-    <Link to="/"><button className="btn btn-edit">돌아가기</button></Link>
-    <Link to={`/reply/${id}`}><button className="btn btn-edit">답글 달기</button></Link>
-</>)
-}
+                <hr style={{color:"black", width:"100%"}} />
+                    <Link to="/"><button className="btn btn-edit">돌아가기</button></Link>
+                    <Link to={`/reply/${id}`}><button className="btn btn-edit">답글 달기</button></Link>
+                </>)
+                }
 
 export default View
